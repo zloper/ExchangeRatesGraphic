@@ -11,6 +11,8 @@ import (
 const W = 1000
 const H = 500
 
+//TODO H from highest rate?
+
 func PaintCurrencyScheme(paramsLst map[string][]float64) string {
 	painter := createGraph(W, H)
 
@@ -36,7 +38,7 @@ func drawCurrency(dc *gg.Context, currencyValues []float64, name string, namePos
 	for i := range currencyValues {
 		lenght -= 1
 		endPointX := zeroX + pointBlock
-		endPointY := H - float64(currencyValues[i])*2.5
+		endPointY := (H / 1.5) - float64(currencyValues[i])
 
 		dc.DrawLine(zeroX, zeroY, endPointX, endPointY)
 		fmt.Println(endPointY)
