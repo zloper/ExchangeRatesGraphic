@@ -1,7 +1,7 @@
 package main
 
 import (
-	"PaintTest/tools"
+	"ExchangeRatesGraphic/tools"
 	"net/http"
 	"strconv"
 	"strings"

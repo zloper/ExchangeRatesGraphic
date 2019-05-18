@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"PaintTest/collors"
+	"ExchangeRatesGraphic/collors"
 	"fmt"
 	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
@@ -26,22 +26,23 @@ func PaintCurrencyScheme(paramsLst map[string][]float64) string {
 	return "Complete"
 }
 
-func drawCurrency(dc *gg.Context, lst []float64, name string, namePos int) {
+func drawCurrency(dc *gg.Context, currencyValues []float64, name string, namePos int) {
 	dc.SetLineWidth(5)
-	lenght := len(lst) + 1
+	lenght := len(currencyValues) + 1
 	pointBlock := float64(W / lenght)
 	piece := float64(W / 6)
 	zeroX := float64(W / 60)
 	zeroY := float64(H / 1.05)
-	for i := range lst {
+	for i := range currencyValues {
 		lenght -= 1
 		endPointX := zeroX + pointBlock
-		endPointY := H / float64(lst[i]) * 2.5
+		endPointY := H - float64(currencyValues[i])*2.5
 
 		dc.DrawLine(zeroX, zeroY, endPointX, endPointY)
+		fmt.Println(endPointY)
 		dc.DrawCircle(endPointX, endPointY, 5)
 
-		strValue := fmt.Sprintf("%f", lst[i])
+		strValue := fmt.Sprintf("%f", currencyValues[i])
 		paintText(dc, strValue, endPointX, endPointY-H/50, 10)
 
 		dc.Stroke()
