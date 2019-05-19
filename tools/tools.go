@@ -28,7 +28,36 @@ func PaintCurrencyScheme(paramsLst map[string][]float64) string {
 	return "Complete"
 }
 
+func findMax(currencyValues []float64) float64 {
+	var res float64
+	for i := range currencyValues {
+		if currencyValues[i] > res {
+			res = currencyValues[i]
+		}
+	}
+	return res
+}
+
+func scaleCrop(currencyValues []float64) []float64 {
+	min := currencyValues[0]
+	for i := range currencyValues {
+		if currencyValues[i] < min {
+			min = currencyValues[i]
+		}
+	}
+	newLst := []float64{}
+	for i := range currencyValues {
+		newLst = append(newLst, currencyValues[i]-min)
+	}
+	return newLst
+}
+
 func drawCurrency(dc *gg.Context, currencyValues []float64, name string, namePos int) {
+	fields := H / 5.0
+	scaledNames := scaleCrop(currencyValues)
+	scale := (H - fields) / findMax(scaledNames)
+	scale = scale / 1.2
+
 	dc.SetLineWidth(5)
 	lenght := len(currencyValues) + 1
 	pointBlock := float64(W / lenght)
@@ -38,10 +67,8 @@ func drawCurrency(dc *gg.Context, currencyValues []float64, name string, namePos
 	for i := range currencyValues {
 		lenght -= 1
 		endPointX := zeroX + pointBlock
-		endPointY := (H / 1.5) - float64(currencyValues[i])
-
+		endPointY := (H - fields) - (scale * float64(scaledNames[i]))
 		dc.DrawLine(zeroX, zeroY, endPointX, endPointY)
-		fmt.Println(endPointY)
 		dc.DrawCircle(endPointX, endPointY, 5)
 
 		strValue := fmt.Sprintf("%f", currencyValues[i])
